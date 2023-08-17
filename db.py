@@ -6,9 +6,10 @@ from config import MYSQL_URL
 
 
 engine = create_engine(MYSQL_URL)
-Base = declarative_base
-session = sessionmaker(autoflush=True, bind=engine, autocommit=True)
+Base = declarative_base()
+session = sessionmaker(autoflush=True, bind=engine, autocommit=False)
 
 
-
+def get_session():
+    return session
 

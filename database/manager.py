@@ -18,7 +18,7 @@ class CategoryManager():
             )
             
         self.session.add_all(inserts)
-        self.commit()
+        self.session.commit()
     
     def get_all_categories(self):
         result = self.session.query(self.model).all()

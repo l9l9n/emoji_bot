@@ -11,5 +11,5 @@ session = sessionmaker(autoflush=True, bind=engine, autocommit=False)
 
 
 def get_session():
-    return session
+    return session()
 

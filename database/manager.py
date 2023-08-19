@@ -7,7 +7,6 @@ class CategoryManager():
         self.model = Category
         self.session = get_session()
         
-    
     def insert_category(self,data):
         inserts = []
         for i in data:
@@ -23,3 +22,34 @@ class CategoryManager():
     def get_all_categories(self):
         result = self.session.query(self.model).all()
         return result
+    
+
+class FilmManager():
+    def __init__(self) :
+        self.model = Film
+        self.session = get_session()
+
+    def get_insert_film(self, data):
+        inserts = []
+        for film in data:
+            inserts.append(
+                Film(
+                   emoji_text = film[0],
+                   name_text = film[1],
+                   category_id = film[2]
+                )
+            )
+
+        self.session.add_all(inserts)
+        self.session.commit()
+
+    def get_films(self):
+        result = self.session.query(self.model).all()
+        return result
+
+
+
+
+
+
+

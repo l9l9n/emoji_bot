@@ -15,6 +15,11 @@ async def start_game(message:types.Message):
     text = "Выберите категорию игры"
     markup = get_catergory_btns()
     await message.answer(text,reply_markup=markup)
+
+
+async def start_category(call: types.CallbackQuery):
+    print(call.data)
+    await call.message.answer("Вы выбрали категорию игры, Игры началась")
     
 
 

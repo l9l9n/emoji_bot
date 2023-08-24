@@ -14,21 +14,32 @@ async def welcome_message(message:types.Message):
     
 async def start_game(message:types.Message):
     text = "Выберите категорию игры"
-    markup = get_catergory_btns()
-    await message.answer(text,reply_markup=markup)
+    user_id = message['from'].id
+    data = await redis_client.get_user_data(user_id)
+    if data:
+        await message.answer('Вы уже в игре. Жулаете завершить игру')
+    else:
+        markup = get_catergory_btns()
+        await message.answer(text, reply_markup=markup)
 
 
 async def start_category(call: types.CallbackQuery):
-    choice = str(call.data).split('_')[1]
-    data ={
-        'level_choice':choice,
-        'test':'test'
-    }
-    user_id = call.message.chat.id
-    # print(call.message)
-    print(user_id)
-    await redis_client.cache_user_data(user_tg_id=user_id,data=data)
-    await call.message.answer('Вы выбрали категорию игры,Игра началась')
+    user_data = await redis_client.get_user_data(call.message.chat.id)
+    if user_data:
+        text = """
+            У вас уже есть активная игра. Завершите ее чтобы продолжить
+    """
+    else:
+        choice = str(call.data).split('_')[1]
+        data ={
+            'level_choice':choice,
+            'test':'test'
+        }
+        user_id = call.message.chat.id
+        # print(call.message)
+        # print(user_id)
+        await redis_client.cache_user_data(user_tg_id=user_id,data=data)
+        await call.message.answer('Вы выбрали категорию игры,Игра началась')
     
 
 

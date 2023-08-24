@@ -1,6 +1,7 @@
 from aiogram import types
 from database.manager import CategoryManager,FilmManager
 from bot_utils.keyboards import get_catergory_btns
+from redis_client import redis_client
 
 
 async def welcome_message(message:types.Message):
@@ -18,8 +19,16 @@ async def start_game(message:types.Message):
 
 
 async def start_category(call: types.CallbackQuery):
-    print(call.data)
-    await call.message.answer("Вы выбрали категорию игры, Игры началась")
+    choice = str(call.data).split('_')[1]
+    data ={
+        'level_choice':choice,
+        'test':'test'
+    }
+    user_id = call.message.chat.id
+    # print(call.message)
+    print(user_id)
+    await redis_client.cache_user_data(user_tg_id=user_id,data=data)
+    await call.message.answer('Вы выбрали категорию игры,Игра началась')
     
 
 

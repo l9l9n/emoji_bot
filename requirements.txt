@@ -14,6 +14,7 @@ magic-filter==1.0.11
 multidict==6.0.4
 PyMySQL==1.1.0
 pytz==2023.3
+redis==5.0.0
 SQLAlchemy==2.0.20
 typing_extensions==4.7.1
 yarl==1.9.2

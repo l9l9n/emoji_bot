@@ -19,6 +19,7 @@ class RedisClient:
                 return client
         except aioredis.AuthenticationError:
             return "Ошибка"
+        
  
     def _create_caching_key(self, user_tg_id):
         return f"{user_tg_id}"
@@ -30,6 +31,6 @@ class RedisClient:
         
     async def get_user_data(self, user_tg_id):
         key = self._create_caching_key(user_tg_id)
-        await self.client.hgetall(name=key)
+        return await self.client.hgetall(name=key)
 
 redis_client = RedisClient()

@@ -8,8 +8,9 @@ bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
 dp.register_message_handler(welcome_message,commands=['start'])
-dp.register_message_handler(get_movie,commands=["movie"])
+# dp.register_message_handler(get_movie,commands=["movie"])
 dp.register_message_handler(start_game, commands=['start_game'])
+dp.register_message_handler(finish_game, commands=['finish_game'])
 dp.register_callback_query_handler(
     start_category,
     lambda c: str(c.data).startswith('category_'))

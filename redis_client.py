@@ -37,5 +37,21 @@ class RedisClient:
         key = self._create_caching_key(user_tg_id)
         await self.client.delete(key)
 
+    def _create_film_key(self, user_tg_id):
+        return f'{user_tg_id}'
+    
+
+    async def cache_user_film(self, user_tg_id, data):
+        key = self._create_film_key(user_tg_id)
+        return await self.client.hgetall(key, data)
+
+    async def get_user_film(self, user_tg_id):
+        key = self._create_film_key(user_tg_id)
+        return await self.client.hgetall(key)
+    
+    async def delete_user_film(self, user_tg_id):
+        key = self._create_film_key(user_tg_id)
+        await self.client.delete(key)
+
 
 redis_client = RedisClient()

@@ -31,7 +31,7 @@ class RedisClient:
         
     async def get_user_data(self, user_tg_id):
         key = self._create_caching_key(user_tg_id)
-        return await self.client.hgetall(name=key)
+        return await self.client.hgetall(key)
     
     async def del_user_data(self, user_tg_id):
         key = self._create_caching_key(user_tg_id)

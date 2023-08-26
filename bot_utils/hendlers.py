@@ -1,9 +1,9 @@
 from aiogram import types
-from database.manager import CategoryManager,FilmManager
+from database.manager import CategoryManager,FilmManager, UserGuessedFilmManager
 from bot_utils.keyboards import get_catergory_btns
 from redis_client import redis_client
 from aiogram.dispatcher import FSMContext
-from states import UserMessageState
+from .states import UserMessageState
 
 
 
@@ -25,18 +25,21 @@ async def start_game(message:types.Message):
         markup = get_catergory_btns()
         await message.answer(text, reply_markup=markup)
 
+
 async def finish_game(message: types.Message):
     user_id = message['from'].id
     await redis_client.del_user_data(user_id)
     await message.answer("Game Over")
-    await message.answer('Колл-во правильных ответов ')
+    await message.answer('Колл-во правильных ответов: 0')
+
 
 async def start_category(call: types.CallbackQuery, state: FSMContext):
     user_data = await redis_client.get_user_data(call.message.chat.id)
     if user_data:
         text = """
             У вас уже есть активная игра. Завершите ее чтобы продолжить
-    """
+            """
+        await call.message.answer(text)
     else:
         choice = str(call.data).split('_')[1]
         data ={
@@ -48,8 +51,23 @@ async def start_category(call: types.CallbackQuery, state: FSMContext):
         # print(user_id)
         await UserMessageState.answer.set()
         await redis_client.cache_user_data(user_tg_id=user_id,data=data)
+        tg_id = user_id
+        guessed_film = UserGuessedFilmManager().get_insert_guessed_film(tg_id)
+        film = FilmManager().get_random_film(film_ids=guessed_film, category_ids=choice)
+        print(film)
         await call.message.answer('Вы выбрали категорию игры,Игра началась')
+        await call.message.answer(f'{film.emoji_text}')
+        await UserMessageState.answer.set()
+
     
+
+async def send_question(message: types.Message, state:FSMContext):
+        data = await state.get_data()
+        print(message.text)
+        tg_id = message['from'].id
+        guessed_film = UserGuessedFilmManager().get_insert_guessed_film(tg_id)
+        film = FilmManager()
+        pass
 
 
 async def get_movie(message:types.Message):

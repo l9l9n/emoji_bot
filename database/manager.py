@@ -56,13 +56,13 @@ class FilmManager():
         from sqlalchemy import not_
         if category_ids:
             i = self.session.query(self.model).filter(
-                not_(Film.category_id.in_(film_ids)),
+                not_(Film.id.in_(film_ids)),
                         Film.category_id == category_ids
                     ).order_by(func.rand()).first()
             return i
         else:
             i = self.session.query(self.model).filter(
-                not_(Film.category_id.in_(film_ids))
+                not_(Film.id.in_(film_ids))
                 ).order_by(func.rand()).first()
             return i
         

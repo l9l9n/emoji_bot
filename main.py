@@ -6,21 +6,23 @@ from utils import fill_category_data, fill_film_data
 
 
 if __name__ == "__main__":
-    data = argv 
-    if data[1] == 'migrate':
+    data = argv
+    print(data)
+    if data[1] == "migrate":
         create_tables()
-        print('Таблицы создались')
+        print("Таблицы создались")
     elif data[1] == 'runbot':
-        print('Бот запущен')
-        executor.start_polling(dp, skip_updates=True)
+        print("Бот запущен")
+        executor.start_polling(dp,skip_updates=True)
     elif data[1] == 'fill_category':
         fill_category_data("data_files/category_data.csv")
-        print('Заполнение таблицы "category"')
+        print('Заполнение таблицы категории')
     elif data[1] == 'fill_films':
-        fill_film_data("data_files/film_data.csv")
-        print('Заполнение таблицы "film"')
+        fill_film_data()
+        print('Заполнение таблицы фильм')
     else:
-        print('Напишите правильную команду!')
+        print("Напишите правильную команду!")
+        
 
 
 
